@@ -33,40 +33,43 @@ int main(void)
 			break;
 		}
 
-		if (line[read - 1] == '\n')
-			line[read - 1] = '\0';
+		char *cmd = strtok(line, " \n");
 
-		if (line[0] == '\0')
-			continue;
-
-		pid = fork();
-		if (pid == -1)
+		while (cmd != NULL)
 		{
-			perror("fork");
-			continue;
-		}
+			char *arg = strtok(cmd, " ");
 
-		if (pid == 0)
-		{
-			char *argv[2];
-
-			argv[0] = line;
-			argv[1] = NULL;
-
-			if (execve(line, argv, environ) == -1)
+			if (arg && *arg != '\0')
 			{
-				perror("./shell");
-				exit(EXIT_FAILURE);
+				pid = fork();
+				if (pid == -1)
+				{
+					perror("fork");
+					break;
+				}
+
+				if (pid == 0)
+				{
+					char *argv[2];
+
+					argv[0] = arg;
+					argv[1] = NULL;
+
+					if (execve(line, argv, environ) == -1)
+					{
+						perror("./shell");
+						exit(EXIT_FAILURE);
+					}
+				}
+				else
+				{
+				waitpid(pid, &status, 0);
+				}
 			}
 
-		}
-		else
-		{
-			waitpid(pid, &status, 0);
-
+			cmd = strtok(NULL, "\n");
 		}
 	}
-
 	free(line);
 	return (0);
 }
