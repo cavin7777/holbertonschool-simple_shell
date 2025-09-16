@@ -16,6 +16,9 @@ int main(void)
 	pid_t pid;
 	int status;
 	int interactive = isatty(STDIN_FILENO);
+	char *token;
+	char *argv[64];
+	int argc;
 
 	while (1)
 	{
@@ -39,19 +42,17 @@ int main(void)
 		if (line[0] == '\0')
 			continue;
 
-		int argc = 0;
-		char *argv[64];
-		char *token = strtok(line, " ");
+		argc = 0;
+		token = strtok(line, " ");
 
 		while (token != NULL && argc < 63)
 		{
 			argv[argc++] = token;
 			token = strtok(NULL, " ");
 		}
-
 		argv[argc] = NULL;
 
-		if (argc == NULL)
+		if (argc == '\0')
 			continue;
 
 		pid = fork();
