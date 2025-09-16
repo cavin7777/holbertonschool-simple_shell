@@ -15,16 +15,11 @@ int main(void)
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO))
 		printf("$simple_shell$ ");
 
 		read = getline(&line, &len, stdin);
-
 		if (read == -1)
-		{
-			printf("./shell");
 			break;
-		}
 
 		if (line[read - 1] == '\n')
 			line[read - 1] = '\0';
@@ -33,7 +28,6 @@ int main(void)
 			continue;
 
 		pid = fork();
-
 		if (pid == -1)
 		{
 			perror("./shell");
@@ -42,27 +36,19 @@ int main(void)
 
 		if (pid == 0)
 		{
-			char *argv[2];
-
-			argv[0] = line;
-			argv[1] = NULL;
-
-			execve(line, argv, NULL);
+			char *argv[2] = {line, NULL};
 
 			if (execve(line, argv, NULL) == -1)
+			{
 				perror("./shell");
+				exit(EXIT_FAILURE);
 
+			}
 		}
-
 		else
-
 			waitpid(pid, &status, 0);
 	}
 
 	free(line);
 	return (0);
 }
-
-
-
-
