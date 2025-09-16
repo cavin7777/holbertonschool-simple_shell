@@ -16,8 +16,6 @@ int main(void)
 	pid_t pid;
 	int status;
 	int interactive = isatty(STDIN_FILENO);
-	char *cmd;
-	char *arg;
 
 	while (1)
 	{
@@ -41,13 +39,20 @@ int main(void)
 		if (line[0] == '\0')
 			continue;
 
-		cmd = strtok(line, " ");
-		if (cmd != NULL)
+		int argc = 0;
+		char *argv[64];
+		char *token = strtok(line, " ");
+
+		while (token != NULL && argc < 63)
 		{
-			printf("Command: %s\n", cmd);
+			argv[argc++] = token;
+			token = strtok(NULL, " ");
 		}
 
-		arg = strtok(NULL, " ");
+		argv[argc] = NULL;
+
+		if (argc == NULL)
+			continue;
 
 		pid = fork();
 		if (pid == -1)
@@ -58,12 +63,8 @@ int main(void)
 
 		if (pid == 0)
 		{
-			char *argv[2];
 
-			argv[0] = arg;
-			argv[1] = NULL;
-
-			if (execve(line, argv, environ) == -1)
+			if (execve(argv[0], argv, environ) == -1)
 			{
 				perror("./shell");
 				exit(EXIT_FAILURE);
