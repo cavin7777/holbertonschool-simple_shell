@@ -41,7 +41,7 @@ int main(void)
 
 		if (pid == 0)
 		{
-			char *argv[] = {line, NULL};
+			char *argv[] = { line, NULL};
 
 			execve(line, argv, NULL);
 
