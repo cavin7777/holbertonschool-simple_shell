@@ -15,6 +15,7 @@ int main(void)
 
 	while (1)
 	{
+		if (isatty(STDIN_FILENO))
 		printf("$simple_shell$ ");
 
 		read = getline(&line, &len, stdin);
