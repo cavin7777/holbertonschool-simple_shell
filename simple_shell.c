@@ -7,19 +7,28 @@
 
 int main(void)
 {
-	char *line;
+	char *line = NULL;
 	size_t len = 0;
 	ssize_t read;
 	pid_t pid;
 	int status;
+	int interactive = isatty(STDIN_FILENO);
 
 	while (1)
 	{
-		printf("$simple_shell$ ");
+		if (interactive)
+		{
+			printf("$simple_shell$ ");
+			fflush(stdout);
+		}
 
 		read = getline(&line, &len, stdin);
 		if (read == -1)
+		{
+			if (interactive)
+				printf("\n");
 			break;
+		}
 
 		if (line[read - 1] == '\n')
 			line[read - 1] = '\0';
@@ -31,6 +40,7 @@ int main(void)
 		if (pid == -1)
 		{
 			perror("./shell");
+			free(line);
 			return (1);
 		}
 
@@ -38,7 +48,7 @@ int main(void)
 		{
 			char *argv[2] = {line, NULL};
 
-			if (execve(line, argv, NULL) == -1)
+			if (execvp(line, argv) == -1)
 			{
 				perror("./shell");
 				exit(EXIT_FAILURE);
@@ -46,7 +56,10 @@ int main(void)
 			}
 		}
 		else
+		{
 			waitpid(pid, &status, 0);
+
+		}
 	}
 
 	free(line);
