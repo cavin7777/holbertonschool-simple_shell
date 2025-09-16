@@ -7,7 +7,6 @@
 #include <string.h>
 #include <errno.h>
 
-extern char **environ;
 
 int main(void)
 {
@@ -16,17 +15,21 @@ int main(void)
 	ssize_t read;
 	pid_t pid;
 	int status;
+	int interactive = isatty(STDIN_FILENO);
 
 	while (1)
 	{
-
-		printf("$simple_shell$ ");
-		fflush(stdout);
+		if (interactive)
+		{
+			printf("$simple_shell$ ");
+			fflush(stdout);
+		}
 
 		read = getline(&line, &len, stdin);
 		if (read == -1)
 		{
-			printf("\n");
+			if (interactive)
+				printf("\n");
 			break;
 		}
 
