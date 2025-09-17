@@ -47,8 +47,9 @@ int main(void)
 
 		while (token != NULL && argc < 63)
 		{
-			argv[argc++] = token;
+			argv[argc] = token;
 			token = strtok(NULL, " ");
+			argc++;
 		}
 		argv[argc] = NULL;
 
