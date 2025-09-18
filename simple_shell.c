@@ -67,8 +67,7 @@ int main(void)
 
 			if (execve(argv[0], argv, environ) == -1)
 			{
-				perror("./shell");
-				exit(EXIT_FAILURE);
+				perror("Error:");
 			}
 		}
 		else
