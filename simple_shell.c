@@ -25,7 +25,6 @@ int main(void)
 		if (interactive)
 		{
 			printf("$simple_shell$ ");
-			fflush(stdout);
 		}
 
 		read = getline(&line, &len, stdin);
