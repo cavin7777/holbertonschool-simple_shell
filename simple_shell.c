@@ -42,18 +42,21 @@ int main(void)
 			continue;
 
 		argc = 0;
-		token = strtok(line, " ");
+		token = strtok(line, " \t\r\n");
 
 		while (token != NULL && argc < 63)
 		{
 			argv[argc] = token;
-			token = strtok(NULL, " ");
+			token = strtok(NULL, " \t\r\n");
 			argc++;
 		}
 		argv[argc] = NULL;
 
-		if (argc == '\0')
+		if (argc == 0)
 			continue;
+
+		if (strcmp(argv[0], "exit") == 0)
+			break;
 
 		pid = fork();
 		if (pid == -1)
@@ -68,6 +71,7 @@ int main(void)
 			if (execve(argv[0], argv, environ) == -1)
 			{
 				perror("Error:");
+				exit(EXIT_FAILURE);
 			}
 		}
 		else
