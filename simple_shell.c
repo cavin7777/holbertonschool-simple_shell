@@ -1,3 +1,4 @@
+#include "main.h"
 #define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,6 +20,7 @@ int main(void)
 	char *token;
 	char *argv[64];
 	int argc;
+	int i;
 
 	while (1)
 	{
@@ -42,12 +44,12 @@ int main(void)
 			continue;
 
 		argc = 0;
-		token = strtok(line, " \t\r\n");
+		token = strtok(line, " ");
 
 		while (token != NULL && argc < 63)
 		{
 			argv[argc] = token;
-			token = strtok(NULL, " \t\r\n");
+			token = strtok(NULL, " ");
 			argc++;
 		}
 		argv[argc] = NULL;
@@ -58,6 +60,12 @@ int main(void)
 		if (strcmp(argv[0], "exit") == 0)
 			break;
 
+		if (strcmp(argv[0], "env") == 0)
+		{
+			for (i = 0; environ[i] != NULL; i++)
+				printf("%s\n", environ[i]);
+			continue;
+		}
 		pid = fork();
 		if (pid == -1)
 		{
