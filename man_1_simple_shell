@@ -1,0 +1,55 @@
+.\" Manpage for hsh
+.TH man 1 "SEPT 21 2025" "1.0" "Holberton Simple Shell Project"
+.SH NAME
+    hsh - Holberton Simple Shell: command line interpreter
+.PP
+.SH SYNOPSIS
+.B hsh
+[command_string [arg...][file]]
+.PP
+.SH COPYRIGHT
+    Public Domain, no copyright protection
+.PP
+.SH DESCRIPTION
+.B hsh
+is a basic imitation of a command line interpreter that reads and implements 
+basic commands from user input as a shell would.
+.PP
+.B hsh
+ is compiled on Ubuntu 24.04.3 LTS with gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 
+13.3.0. It is built to run in both interactive and noninteractive mode.
+.PP
+.SH USER INPUT
+Once a user inputs a command and hits enter, the shell performs the following 
+actions:
+
+1. Splits the command into an array of words.
+
+2. Looks for the command.
+
+3. Executes the command.
+.PP
+.SH SEARCH FOR COMMAND
+When locating a command, the shell looks for a built-in command by that name.
+If a built-in command is not found, the shell searches for the command in the 
+PATH.
+.PP
+.SH EXECUTE COMMAND
+Commands are executed in a child process of the main process.
+.PP
+.SH BUILTINS
+.IP env
+Prints out all environment variables
+.IP exit
+Exits process and frees memory allocated.
+.PP
+.SH BUGS
+
+.PP
+.SH AUTHORS
+Yannick Sookree <yannicksookree@gmail.com>
+
+.PP
+.SH SEE ALSO
+.BR man
+.BR sh
